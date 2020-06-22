@@ -75,10 +75,6 @@ public class TestAC {
 			
 			String[] keys = {"he", "she", "his", "hers", "ers"};
 			
-//			String[] keys = {"123abc", "124abc", "11abc", "1abc", "abc"};
-			
-			String text = "shers she is";
-			
 			Trie trie1 = new Trie().removeOverlaps().onlyWholeWords();
 			
 			Trie trie2 = new Trie().removeOverlaps().onlyWholeWords();
@@ -86,11 +82,11 @@ public class TestAC {
 			for(String k : keys)
 			{
 				System.out.println("add pattern:" + k + "==============");
-//				System.out.println("trie 1-------");
+				System.out.println("trie 1-------");
 				trie1.addKeywordInc(k,k);
-//				trie1.printTrie();
+				trie1.printTrie();
 				
-//				System.out.println("trie 2-------");
+				System.out.println("trie 2-------");
 				trie2.addKeywordInc2(k,k);
 				trie2.printTrie();
 			}
@@ -144,11 +140,11 @@ public class TestAC {
 				System.out.println(line);
 			}
 			
-//			trie1.checkBuild();
+			trie1.checkBuild();
 			
-//		    trie1.printTrie();
+		    trie1.printTrie();
 		    
-//		    trie2.printTrie();
+		    trie2.printTrie();
 		    
 		    
 		    
