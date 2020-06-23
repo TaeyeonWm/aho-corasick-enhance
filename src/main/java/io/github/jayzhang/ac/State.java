@@ -1,4 +1,4 @@
-package org.ac;
+package io.github.jayzhang.ac;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
 
 
 public class State {
@@ -47,6 +46,10 @@ public class State {
         this.rootState = depth == 0 ? this : null;
     }
 
+    /**
+     * 
+     * 返回当前字符指向的next状态，如果ignoreRootState=false，当next为空时返回根节点，否则返回next节点
+     */
     public State nextState(Character character, boolean ignoreRootState) {
         State nextState = this.success.get(character);
         if (!ignoreRootState && nextState == null && this.rootState != null) {
@@ -124,10 +127,6 @@ public class State {
 
     public void setFailure(State failState) 
     {
-//    	if(failState == this.failure)
-//    	{
-//    		System.out.println(this + " - setFailure duplicate!");
-//    	}
     	if(this.failure != null)
     	{
     		this.failure.beFailuredBys.remove(this);

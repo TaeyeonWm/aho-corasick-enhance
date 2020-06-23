@@ -1,4 +1,4 @@
-package org.ac;
+package io.github.jayzhang.ac;
 
 public interface TrieNodeVisitor {
 

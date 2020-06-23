@@ -4,16 +4,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.ac.Emit;
-import org.ac.State;
-import org.ac.Trie;
-import org.ac.TrieNodeVisitor;
+import org.junit.Test;
+
+import io.github.jayzhang.ac.Emit;
+import io.github.jayzhang.ac.State;
+import io.github.jayzhang.ac.Trie;
+import io.github.jayzhang.ac.TrieNodeVisitor;
 
 
 public class TestAC {
 
-	
-	public static void performance()
+	@Test
+	public void performance()
 	{
 		String text = "The ga3 mutant of Arabidopsis is a gibberellin-responsive dwarf. We present data showing that the ga3-1 mutant is deficient in ent-kaurene oxidase activity, the first cytochrome P450-mediated step in the gibberellin biosynthetic pathway. By using a combination of conventional map-based cloning and random sequencing we identified a putative cytochrome P450 gene mapping to the same location as GA3. Relative to the progenitor line, two ga3 mutant alleles contained single base changes generating in-frame stop codons in the predicted amino acid sequence of the P450. A genomic clone spanning the P450 locus complemented the ga3-2 mutant. The deduced GA3 protein defines an additional class of cytochrome P450 enzymes. The GA3 gene was expressed in all tissues examined, RNA abundance being highest in inflorescence tissue.";
 		
@@ -51,7 +53,7 @@ public class TestAC {
 		
 		for(String t : terms)
 		{
-			trie.addKeyword(t,t);
+			trie.addPattern(t,t);
 			
 		}
 		trie.checkBuild();
@@ -60,34 +62,34 @@ public class TestAC {
 		
 		for(int i = 0 ; i < 1; ++ i)
 		{
-			Collection<Emit> emits = trie.parseText(text);
+			Collection<Emit> emits = trie.match(text);
 			
 			System.out.println(emits.size());
-		}
-		
-		
+		} 
 	}
 	
-	
-	public static void testAC()
+	@Test
+	public void testAC()
 	{
 		{
 			
-			String[] keys = {"he", "she", "his", "hers", "ers"};
+			String text = "She is a girl. He is a boy. Hers eyes are both big.";
 			
-			Trie trie1 = new Trie().removeOverlaps().onlyWholeWords();
+			String[] keys = {"he", "he", "she", "his", "hers", "ers"};
 			
-			Trie trie2 = new Trie().removeOverlaps().onlyWholeWords();
+			Trie trie1 = new Trie().removeOverlaps().onlyWholeWords().caseInsensitive();
+			
+			Trie trie2 = new Trie().removeOverlaps().onlyWholeWords().caseInsensitive();
 			
 			for(String k : keys)
 			{
 				System.out.println("add pattern:" + k + "==============");
 				System.out.println("trie 1-------");
-				trie1.addKeywordInc(k,k);
+				trie1.addPatternOnline(k,k);
 				trie1.printTrie();
 				
 				System.out.println("trie 2-------");
-				trie2.addKeywordInc2(k,k);
+				trie2.addPatternOnline(k,k);
 				trie2.printTrie();
 			}
 			
@@ -127,7 +129,7 @@ public class TestAC {
 			}
 			
 			
-			trie2.removeKeywordInc2("ers");
+			trie2.removePatternOnline("ers");
 			
 			System.out.println("-----------------");
 			
@@ -148,75 +150,15 @@ public class TestAC {
 		    
 		    
 		    
-//		    System.out.println(trie1.parseText(text));
-//		    
-//		    System.out.println(trie2.parseText(text));
+		    System.out.println(trie1.match(text));
 		    
-//		    
-//		    Collection<Token> tokens = trie.tokenize(text);
-//		    StringBuffer html = new StringBuffer();
-//	 	    html.append("<html><body><p>");
-//	 	    for (Token token : tokens) {
-//	 	        if (token.isMatch()) {
-//	 	            html.append("<i>");
-//	 	        }
-//	 	        html.append(token.getFragment());
-//	 	        if (token.isMatch()) {
-//	 	            html.append("</i>");
-//	 	        }
-//	 	    }
-//	 	    html.append("</p></body></html>");
-//	 	    System.out.println(html);
+		    System.out.println(trie2.match(text));
+		    
+		     
 	 	    
 		}
 
-	    
-//	    {
-//	    	 String speech = "The Answer to the great Question... Of Life, " +
-//	 	            "the Universe and Everything... Is... Forty-two,' said " +
-//	 	            "Deep Thought, with infinite majesty and calm.";
-//	 	    Trie trie = new Trie().removeOverlaps().onlyWholeWords().caseInsensitive();
-//	 	    trie.addKeyword("great question");
-//	 	    trie.addKeyword("forty-two");
-//	 	    trie.addKeyword("deep thought");
-//	 	    Collection<Token> tokens = trie.tokenize(speech);
-//	 	    StringBuffer html = new StringBuffer();
-//	 	    html.append("<html><body><p>");
-//	 	    for (Token token : tokens) {
-//	 	        if (token.isMatch()) {
-//	 	            html.append("<i>");
-//	 	        }
-//	 	        html.append(token.getFragment());
-//	 	        if (token.isMatch()) {
-//	 	            html.append("</i>");
-//	 	        }
-//	 	    }
-//	 	    html.append("</p></body></html>");
-//	 	    System.out.println(html);
-//	    }
+	     
 	}
-	
-	public static void test3()
-	{
-		 Trie trie = new Trie();
-    	  trie.caseInsensitive().removeOverlaps().onlyWholeWords();
-    	  trie.addKeyword("to8to_table", "1");
-    	  trie.addKeyword("to8to_apply", "2");
-    	  trie.addKeyword("to8to_yuyue", "3");
-    	  trie.checkBuild();
-    	  Collection<Emit> emits1 = trie.parseText("to8to_table to8to_tableto8to_yuyue to8to_apply");
-    	  
-    	  for(Emit e : emits1)
-    	  {
-    		  System.out.println(e);
-    		  System.out.println(e.getData());
-    	  }
-	}
-	
-	public static void main(String[] args) {
-//		performance();
-//		test3();
-		testAC();
-	}
-
+	 
 }
