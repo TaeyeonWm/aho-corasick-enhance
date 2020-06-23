@@ -27,9 +27,11 @@ public class Emit {
 		return data;
 	}
  
+    @Override
     public String toString() {
-        String t = pattern + "[" + super.toString() + "]";
-        return t;
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(pattern).append("(").append(start).append(",").append(end).append(")");
+        return sb.toString();
 	}
 
 }

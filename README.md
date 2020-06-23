@@ -4,76 +4,50 @@ enhancement of  aho-corasick automa with incrementally adding or removing patter
 # usage
 
 ```
-String[] keys = {"he", "she", "his", "hers", "ers"};
-
-Trie trie1 = new Trie().removeOverlaps().onlyWholeWords();
-
-Trie trie2 = new Trie().removeOverlaps().onlyWholeWords();
-
-for(String k : keys)
-{
-	System.out.println("add pattern:" + k + "==============");
-	System.out.println("trie 1-------");
-	trie1.addKeywordInc(k,k);
-	trie1.printTrie();
-	
-	System.out.println("trie 2-------");
-	trie2.addKeywordInc2(k,k);
-	trie2.printTrie();
-}
-
-List<String> lines = new ArrayList<>();
-
-TrieNodeVisitor visitor = new TrieNodeVisitor() {
-
-	@Override
-	public boolean visit(State state) {
+String text = "The ga3 mutant of Arabidopsis is a gibberellin-responsive dwarf. We present data showing that the ga3-1 mutant is deficient in ent-kaurene oxidase activity, the first cytochrome P450-mediated step in the gibberellin biosynthetic pathway. By using a combination of conventional map-based cloning and random sequencing we identified a putative cytochrome P450 gene mapping to the same location as GA3. Relative to the progenitor line, two ga3 mutant alleles contained single base changes generating in-frame stop codons in the predicted amino acid sequence of the P450. A genomic clone spanning the P450 locus complemented the ga3-2 mutant. The deduced GA3 protein defines an additional class of cytochrome P450 enzymes. The GA3 gene was expressed in all tissues examined, RNA abundance being highest in inflorescence tissue.";
 		
-		String from = state.getId() + "";
-		
-		for(State child: state.getSuccess().values())
-		{
-			String to = child.getId() + "";
-			
-			lines.add(from + "->" + to + "[label = \""+child.getAbsorb()+"\", fontsize=20 ]");
-		}
-		
-		for(State child: state.getBeFailuredBys())
-		{
-			String to = child.getId() + "";
-			
-			lines.add(to + "->" + from + "[style=\"dashed\",color = red ]");
-		}
-		
-		return true;
-	}
+String[] terms = {
+    "microsome",
+    "cytochrome",
+    "cytochrome P450 activity", 
+    "gibberellic acid biosynthesis", 
+    "GA3", 
+    "cytochrome P450", 
+    "oxygen binding", 
+    "AT5G25900.1", 
+    "protein", 
+    "RNA", 
+    "gibberellin", 
+    "Arabidopsis", 
+    "ent-kaurene oxidase activity", 
+    "inflorescence", 
+    "tissue", 
+    "generally",
+    "famous",
+    "Europe and many"
 };
 
 
-trie2.visit(visitor);
+Trie trie = new Trie();
 
-for(String line: lines)
+for(String t : terms)
 {
-	System.out.println(line);
+	trie.addPattern(t,t);
+	
 }
+trie.checkBuild();
+ 
+Collection<Emit> emits = trie.match(text);
 
+emits.stream().forEach(i->System.out.println(i));
 
-trie2.removeKeywordInc2("ers");
+trie.match(text, new EmitVisitor() {
 
-System.out.println("-----------------");
-
-lines.clear();
-
-trie2.visit(visitor);
-
-for(String line: lines)
-{
-	System.out.println(line);
-}
-
-trie1.checkBuild();
-
-trie1.printTrie();
-
-trie2.printTrie();
+	@Override
+	public boolean visit(State state, Emit emit) {
+		System.out.println(emit);
+		return true;
+	}
+	
+});
 ```

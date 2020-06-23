@@ -37,12 +37,12 @@ public class Trie {
         this.trieConfig.setAllowOverlaps(false);
         return this;
     }
-
-    public Trie onlyWholeWords() 
-    {
-        this.trieConfig.setOnlyWholeWords(true);
-        return this;
-    }
+//
+//    public Trie onlyWholeWords() 
+//    {
+//        this.trieConfig.setOnlyWholeWords(true);
+//        return this;
+//    }
 
     /**
      * 离线添加模式
